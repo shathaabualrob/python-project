@@ -3,37 +3,59 @@ from flask_restful import Api, Resource,request,reqparse
 from test import ConnectionHelper
 from flask_jwt_extended import *
 import datetime
-from github3 import login
+
+import os
+import pyodbc
 
 
-class login(Resource):
+class ConnectionHelper:
+    def get_connection(self):
+             conn = pyodbc.connect('Driver={SQL Server 15.0.2070};'
+                'Server=-DESKTOP-5RKIGS9\SQLEXPRESS;'
+                'Database=python;'
+                'Trusted_Connection=yes;')
+             my_cursor = conn.cursor() # type: object
 
-    def get_user(self):
-        connection, cursor = ConnectionHelper().get_connection()
-        user_id = request.args.get("email",default=None,Type=None)
-        user_password = request.args.get("password",default=None,Type=None)
-        login_status = False
-        query = "select email,password from User"
-        cursor.execute(query)
-        user_dic = {}
-        all_rows = cursor.fetchall()
-        for row in all_rows:
-            user_dic[row[0]] = row[1]
-        #return user_dic
-        print(user_dic)
-
-           # if user["id"] == int(user_id) and user["password"] == user_password:
-
-               # login_success = True
-           # if login_success == True:
-
-               # access_token = create_access_token(identity=user_id)
-            #return access_token
+             #print(conn)
+             print("amal")
+             return conn, my_cursor
 
 
+
+class Login(Resource,ConnectionHelper):
+
+    def get(self):
+         parser = reqparse.RequestParser()
+         parser.add_argument("Email", required=True, type=str)
+         parser.add_argument("Password", required=True, type=str)
+         content = parser.parse_args()
+         user_email = content["Email"]
+         user_password = content["Password"]
+
+         login_status = False
+         connection, cursor = ConnectionHelper().get_connection()
+         query = "select * from User"
+         cursor.execute(query)
+         users_dic = {}
+         all_rows = cursor.fetchall()
+         for row in all_rows:
+             users_dic[row[4]] = row[5]
+
+         return users_dic
+
+
+         #login_success = True
+         #return user_email
+
+
+
+
+
+
+print(__name__)
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(login, "/login")
+api.add_resource(Login, "/login")
 app.config['JWT_SECRET_KEY'] = 'AAABBBCCCDDD'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 jwt = JWTManager(app)
