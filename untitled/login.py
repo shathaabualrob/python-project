@@ -3,6 +3,8 @@ from flask_restful import Api, Resource,request,reqparse
 from test import ConnectionHelper
 from flask_jwt_extended import *
 import datetime
+from github3 import login
+
 
 class login(Resource):
 
@@ -29,22 +31,17 @@ class login(Resource):
             #return access_token
 
 
-
-
-
-    print(__name__)
-    app = Flask(__name__)
-    api = Api(app)
-    api.add_resource(login, "/login")
-
-    app.config['JWT_SECRET_KEY'] = 'AAABBBCCCDDD'
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
-    jwt = JWTManager(app)
-    # Authorization: Bearer <JWT>
-    app.run(
-        host="0.0.0.0",
-        port=8888
-    )
+app = Flask(__name__)
+api = Api(app)
+api.add_resource(login, "/login")
+app.config['JWT_SECRET_KEY'] = 'AAABBBCCCDDD'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
+jwt = JWTManager(app)
+# Authorization: Bearer <JWT>
+app.run(
+    host="0.0.0.0",
+    port=9999
+)
 
 
 
