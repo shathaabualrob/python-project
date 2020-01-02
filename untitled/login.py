@@ -41,7 +41,14 @@ class Login(Resource,ConnectionHelper):
          for row in all_rows:
              users_dic[row[4]] = row[5]
 
-         return users_dic
+         if users_dic["Email"]==user_email & users_dic["Password"]==user_password:
+             login_status = True
+
+         if login_status == True:
+             access_token = create_access_token(identity = user_email)
+             return access_token
+         else:
+             return "login fails"
 
 
          #login_success = True
