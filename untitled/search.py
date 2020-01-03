@@ -8,7 +8,7 @@ from test import ConnectionHelper
 import os
 import pyodbc
 
-
+#hi raghad
 class search_article(Resource,ConnectionHelper):
     @jwt_required
     def get(self):
