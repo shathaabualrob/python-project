@@ -3,10 +3,8 @@ from flask_restful import Api, Resource,request,reqparse
 from test import ConnectionHelper
 from flask_jwt_extended import *
 import datetime
-
 import os
 import pyodbc
-
 
 class ConnectionHelper:
     def get_connection(self):
@@ -25,6 +23,8 @@ class ConnectionHelper:
 class Login(Resource,ConnectionHelper):
 
     def get(self):
+
+
          parser = reqparse.RequestParser()
          parser.add_argument("Email", required=True, type=str)
          parser.add_argument("Password", required=True, type=str)
@@ -37,6 +37,7 @@ class Login(Resource,ConnectionHelper):
          query = "select * from User"
          cursor.execute(query)
          users_dic = {}
+
          all_rows = cursor.fetchall()
          for row in all_rows:
              users_dic[row[4]] = row[5]

@@ -24,14 +24,19 @@ class search_article(Resource,ConnectionHelper):
         query = "SELECT Topic,Title,Content from Interest , Article"
         cursor.execute(query)
         count = 0
+        json=""
         all_rows = cursor.fetchall()
         for row in all_rows:
             content = row[3]
             if keyword in content:
                 count+=1
-                return count, all_rows
-            else:
-                return "article not found"
+                json + "{Title = " + row[0] + "\\" + "Content = " + row[1] + "\\" + "Topic = " + row[
+                    1] + "\\" + "}," + "\\"
+        if count !=0:
+            return json + "]" + "\\" + "}"
+        else:
+            return "No matched atricles are found"
+
 
 
 

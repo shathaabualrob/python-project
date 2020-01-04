@@ -25,10 +25,10 @@ class article_sentences(Resource):
         reg_tokenizer = RegexpTokenizer('\w+')
         for articles in article_content:
             sentences = sent_tokenize(articles)
-            for sentence in sentences:
-                
-            uniqe_words = set(reg_tokenizer((articles)))
-            for word in uniqe_words:
+            #for sentence in sentences:
+
+            #uniqe_words = set(reg_tokenizer((articles)))
+            #for word in uniqe_words:
 
 
 
